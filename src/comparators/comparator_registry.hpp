@@ -43,9 +43,9 @@ namespace flawed {
 
 
     template<typename T, typename ComparatorType, typename... Args>
-    requires std::derived_from<ComparatorType, ComparatorBase>
+    requires std::derived_from<ComparatorType, FlComparator<T>>
     void registerClassComparator(const Args&... args) {
-        _comparatorMap[_getTypeName<T>()] = std::make_shared<ComparatorBase>(args...);
+        _comparatorMap[_getTypeName<T>()] = std::make_shared<ComparatorType>(args...);
     }
 
 

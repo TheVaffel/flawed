@@ -6,7 +6,7 @@
 
 namespace flawed {
     void ThrowAssertionHandler::handleAssertionFailed() {
-        flawed_println("Throwing on assertion failed");
+        _flawed_println("Throwing on assertion failed");
         throw FlException("Assertion failed");
     }
 
@@ -23,7 +23,7 @@ namespace flawed {
         _assertion_handler = std::move(assertion_handler);
     }
 
-    void _run_assertion_handler() {
+    void _run_assertion_failed_handler() {
         _assertion_handler->handleAssertionFailed();
     }
 };

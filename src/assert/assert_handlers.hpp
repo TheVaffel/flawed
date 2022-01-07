@@ -1,3 +1,5 @@
+#pragma once
+
 #include <memory>
 
 namespace flawed {
@@ -28,5 +30,5 @@ namespace flawed {
 
     void set_assertion_handler(std::unique_ptr<AssertionHandler>&& assertion_handler);
 
-    void _run_assertion_handler();
+    void _run_assertion_failed_handler();
 };

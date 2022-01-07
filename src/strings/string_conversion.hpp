@@ -1,3 +1,6 @@
+#pragma once
+
+#include <sstream>
 
 namespace flawed {
 
@@ -10,7 +13,7 @@ namespace flawed {
 
     template <typename T>
     requires std::is_arithmetic<T>::value
-    static std::string _to_string(const T& t) {
+    std::string _to_string(const T& t) {
         std::ostringstream oss;
         oss << t;
         return oss.str();
@@ -18,5 +21,5 @@ namespace flawed {
 
     template <typename T>
     requires std::convertible_to<T, std::string>
-    static std::string _to_string(const T &t) { return (std::string)t; }
+    std::string _to_string(const T &t) { return (std::string)t; }
 };

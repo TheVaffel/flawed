@@ -3,6 +3,12 @@
 #include <iostream>
 #include <memory>
 
+class CustomIntegralComparator : public flawed::FlComparator<int> {
+    virtual float compare(const int& v0, const int& v1) override {
+        return v1 - v0;
+    }
+};
+
 namespace some_namespace {
     void run() {
 
@@ -13,6 +19,7 @@ namespace some_namespace {
         double d0 = 0.5, d1 = 0.55;
 
         flawed::set_assertion_handler(std::make_unique<flawed::NoOpAssertionHandler>());
+        flawed::registerClassComparator<int, CustomIntegralComparator>();
 
         fl_assert(true);
         fl_assert(false);
@@ -41,6 +48,9 @@ namespace some_namespace {
 
         fl_assert_tolerance(d0, d1, 0.1);
         fl_assert_tolerance(d0, d1, 0.02);
+
+        // Testing int comparator
+        fl_assert_tolerance(v0, v1, 10);
     }
 };
 

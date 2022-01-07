@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 project(flawed)
 
-add_definitions("-std=c++2a -fPIC")
+add_definitions("-std=c++2a -fPIC -g")
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/lib)
 
@@ -18,7 +18,8 @@ set(UTIL_SOURCES
   ${UTILS_DIR}/error.cpp)
 
 set(ASSERT_SOURCES
-  ${ASSERT_DIR}/assert_handlers.cpp)
+  ${ASSERT_DIR}/assert_handlers.cpp
+  ${ASSERT_DIR}/asserts.cpp)
 
 set(TESTING_SOURCES
   ${TESTING_DIR}/testing.cpp)

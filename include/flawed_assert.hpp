@@ -7,6 +7,8 @@
 #include <memory>
 
 #include "../src/assert/assert_handlers.hpp"
+#include "../src/assert/asserts.hpp"
+
 #include "../src/strings/data.hpp"
 #include "../src/strings/colors.hpp"
 #include "../src/strings/abbrev.hpp"
@@ -51,19 +53,6 @@ namespace flawed {
     static bool _ge(const T& v0, const T& v1) {
         return v0 >= v1;
     }
-
-    template<typename T>
-    void _fl_assert_tolerance(const T& x, const T& y,
-                              float tolerance,
-                              int line_number, const std::string& file_name ) {
-        float value = _compare(x, y);
-        if (std::abs(value) > tolerance) {
-            flawed::_printComparatorError<T>(x, y, value, tolerance);
-            flawed::_run_assertion_handler();
-            std::cout << "Did some assertion thing" << std::endl;
-        }
-    }
-
 };
 
 
@@ -71,34 +60,14 @@ namespace flawed {
  * -- Assert macros
  */
 
-#define fl_assert(x)                                                    \
-    {                                                                   \
-        if (!x) {                                                       \
-            fprintf(stderr, "%s %s \"%s\" at line %d in file %s\n",     \
-                    ::flawed::_flawed_title.c_str(), ::flawed::_assertion_failed_string.c_str(), \
-                    ::flawed::_add_color(#x, ::flawed::_fl_blue).c_str(), __LINE__, __FILE__); \
-            flawed::_run_assertion_handler();                           \
-        }                                                               \
-    }
+#define fl_assert(x)                                                           \
+  { ::flawed::_fl_assert(x, #x, __LINE__, __FILE__); }
+
 
 #define _fl_assert_op(op, v0, v1, error_message)                        \
-    {                                                                   \
-        if (!op(v0, v1)) {                                              \
-            fprintf(stderr,                                             \
-                    "%s %s Expected that %s %s %s, but it was "         \
-                    "not the case:"                                     \
-                    "\nAt %s:%s\n\tLeft side: %s\n\tRight side: %s\n",  \
-                    ::flawed::_flawed_title.c_str(), ::flawed::_assertion_failed_string.c_str(), \
-                    ::flawed::_add_color(#v0, ::flawed::_fl_green).c_str(), error_message, \
-                    ::flawed::_add_color(#v1, ::flawed::_fl_red).c_str(), \
-                    ::flawed::_add_color(__FILE__, ::flawed::_fl_red).c_str(), \
-                    ::flawed::_add_color(::flawed::_to_string(__LINE__), ::flawed::_fl_red).c_str(), \
-                    ::flawed::_add_color(::flawed::_abbrev_string(::flawed::_to_string(v0)), ::flawed::_fl_green).c_str(), \
-                    ::flawed::_add_color(::flawed::_abbrev_string(::flawed::_to_string(v1)), ::flawed::_fl_red).c_str()); \
-            flawed::_run_assertion_handler();                           \
-        }                                                               \
+    { \
+        ::flawed::_fl_assert_op(op(v0, v1), v0, v1, #v0, #v1, error_message, __LINE__, __FILE__); \
     }
-
 
 #define fl_assert_eq(x, y)                                      \
     { _fl_assert_op(::flawed::_eq, x, y, "was equal to"); }
