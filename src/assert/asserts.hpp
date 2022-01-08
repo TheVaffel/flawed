@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 
 #include "../comparators/comparator_registry.hpp"
 #include "./assert_handlers.hpp"
@@ -8,11 +9,15 @@ namespace flawed {
 
     template<typename T>
     void _fl_assert_tolerance(const T& x, const T& y,
+                              const std::string& sx, const std::string& sy,
                               float tolerance,
-                              int line_number, const std::string& file_name ) {
+                              int line_number, const std::string& file_name) {
         float value = _compare(x, y);
         if (std::abs(value) > tolerance) {
-            flawed::_printComparatorError<T>(x, y, value, tolerance);
+            flawed::_printComparatorError<T>(x, y,
+                                             sx, sy,
+                                             line_number, file_name,
+                                             value, tolerance);
             flawed::_run_assertion_failed_handler();
         }
     }
@@ -36,7 +41,7 @@ namespace flawed {
                                                    const std::string& op_error,
                                                    int line_number,
                                                    const std::string& file_name) {
-            _fl_print_assertion_failed_op_header(s1, s1, op_error);
+            _fl_print_assertion_failed_op_header(s0, s1, op_error);
 
             _fl_assert_print_location(line_number, file_name);
 
@@ -58,6 +63,15 @@ namespace flawed {
     }
 
 
-
     void _fl_assert(bool b, const std::string assert_str, int line_number, const std::string& file_name);
+
+    void _fl_assert_not_throwing(const std::function<void()>& func,
+                                 const std::string& sfunc,
+                                 int line_number,
+                                 const std::string& file_name);
+
+    void _fl_assert_throwing(const std::function<void()>& func,
+                             const std::string& sfunc,
+                             int line_number,
+                             const std::string& file_name);
 };

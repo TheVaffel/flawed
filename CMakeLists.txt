@@ -9,7 +9,6 @@ set(SRC_DIR ${CMAKE_HOME_DIRECTORY}/src)
 
 set(UTILS_DIR ${SRC_DIR}/utils)
 set(ASSERT_DIR ${SRC_DIR}/assert)
-set(TESTING_DIR ${SRC_DIR}/testing)
 set(STRING_DIR ${SRC_DIR}/strings)
 set(COMPARATORS_DIR ${SRC_DIR}/comparators)
 
@@ -20,9 +19,6 @@ set(UTIL_SOURCES
 set(ASSERT_SOURCES
   ${ASSERT_DIR}/assert_handlers.cpp
   ${ASSERT_DIR}/asserts.cpp)
-
-set(TESTING_SOURCES
-  ${TESTING_DIR}/testing.cpp)
 
 set(STRING_SOURCES
   ${STRING_DIR}/colors.cpp
@@ -35,6 +31,13 @@ set(COMPARATORS_SOURCES
 add_library(${CMAKE_PROJECT_NAME}
   ${UTIL_SOURCES}
   ${ASSERT_SOURCES}
-  ${TESTING_SOURCES}
   ${STRING_SOURCES}
   ${COMPARATORS_SOURCES})
+
+set(TESTING_DIR ${SRC_DIR}/testing)
+
+set(TESTING_SOURCES
+  ${TESTING_DIR}/flawed_testing.cpp)
+
+add_library(flawed_testing
+  ${TESTING_SOURCES})

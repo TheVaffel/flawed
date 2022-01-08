@@ -7,5 +7,5 @@ namespace flawed {
      * -- String abbreviation
      */
 
-    std::string _abbrev_string(const std::string& str);
+    std::string _abbrev_string(const std::string& str, int maxLength);
 };

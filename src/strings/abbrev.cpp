@@ -1,14 +1,11 @@
 #include "./abbrev.hpp"
 
 namespace flawed {
-    static const int _FL_MAX_STRING_LENGTH = 80;
-    static const int _FL_STRING_ABBREV_END_LENGTH = 30;
-
-    std::string _abbrev_string(const std::string& str) {
-        if (str.length() > _FL_MAX_STRING_LENGTH) {
-            return str.substr(0, _FL_STRING_ABBREV_END_LENGTH) +
-                "[...]" +
-                str.substr(str.length() - _FL_STRING_ABBREV_END_LENGTH);
+    std::string _abbrev_string(const std::string& str, int max_length) {
+        if (str.length() > max_length) {
+            return str.substr(0, max_length / 2 - 3) +
+                "..." +
+                str.substr(str.length() - (max_length / 2 - 3));
         }
 
         return str;

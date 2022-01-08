@@ -28,6 +28,8 @@ namespace flawed {
 
     template<typename T>
     void _printComparatorError(const T& x, const T& y,
+                               const std::string& sx, const std::string& sy,
+                               int line_number, const std::string& file_name,
                                float value, float tolerance) {
         std::string type_name = _getTypeName<T>();
         if (_comparatorMap.find(type_name) == _comparatorMap.end()) {
@@ -38,13 +40,13 @@ namespace flawed {
 
         return std::static_pointer_cast<FlComparator<T>>(
             _comparatorMap[type_name]
-            )->printError(x, y, value, tolerance);
+            )->printError(x, y, sx, sy, line_number, file_name, value, tolerance);
     }
 
 
     template<typename T, typename ComparatorType, typename... Args>
     requires std::derived_from<ComparatorType, FlComparator<T>>
-    void registerClassComparator(const Args&... args) {
+    void registerComparator(const Args&... args) {
         _comparatorMap[_getTypeName<T>()] = std::make_shared<ComparatorType>(args...);
     }
 

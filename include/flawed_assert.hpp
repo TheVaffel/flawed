@@ -6,17 +6,7 @@
 #include <sstream>
 #include <memory>
 
-#include "../src/assert/assert_handlers.hpp"
 #include "../src/assert/asserts.hpp"
-
-#include "../src/strings/data.hpp"
-#include "../src/strings/colors.hpp"
-#include "../src/strings/abbrev.hpp"
-#include "../src/strings/string_conversion.hpp"
-
-#include "../src/comparators/FlComparator.hpp"
-#include "../src/comparators/FlNumericComparator.hpp"
-#include "../src/comparators/comparator_registry.hpp"
 
 namespace flawed {
 
@@ -88,4 +78,10 @@ namespace flawed {
     { _fl_assert_op(::flawed::_ge, x, y, "was greater than or equal to"); }
 
 #define fl_assert_tolerance(x, y, tolerance) \
-    { ::flawed::_fl_assert_tolerance(x, y, tolerance, __LINE__, __FILE__); }
+    { ::flawed::_fl_assert_tolerance(x, y, #x, #y, tolerance, __LINE__, __FILE__); }
+
+#define fl_assert_not_throwing(func) \
+    { ::flawed::_fl_assert_not_throwing(func, #func, __LINE__, __FILE__); }
+
+#define fl_assert_throwing(func) \
+    { ::flawed::_fl_assert_throwing(func, #func, __LINE__, __FILE__); }
