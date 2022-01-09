@@ -11,6 +11,7 @@ class CustomIntegralComparator : public flawed::FlComparator<int> {
 
 namespace some_namespace {
     void run() {
+        std::cout << "Beginning of run" << std::endl;
 
         int v0 = 12, v1 = 23;
 
@@ -51,6 +52,8 @@ namespace some_namespace {
 
         // Testing int comparator
         fl_assert_tolerance(v0, v1, 10);
+
+        std::cout << "End of run" << std::endl;
     }
 };
 
