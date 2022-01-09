@@ -7,3 +7,6 @@ build
 lib/*
 
 **/.clang-format
+
+examples/fl_assert_example
+examples/testing

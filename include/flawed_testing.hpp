@@ -5,19 +5,25 @@
 #include <utility>
 
 namespace flawed {
-    class TestSuiteBase {
+    class TestSuite {
         std::string name = "";
         std::vector<std::pair<const std::string, std::function<void()>>> tests;
-    protected:
-
-        TestSuiteBase(const std::string& name);
     public:
+
+        TestSuite(const std::string& name);
 
         void addTest(const std::string& name, const std::function<void()>& func);
         std::string getName() const;
         void run();
-        virtual ~TestSuiteBase() = default;
     };
 
-    extern std::unique_ptr<TestSuiteBase> fl_test_suite;
+
+    extern TestSuite* test_suite;
+
+    TestSuite* _createTestSuite(const std::string& name, const std::function<void()>& func);
+    void createTest(const std::string& name, const std::function<void()>& test);
 };
+
+#define createTestSuite(name, func) TestSuite* flawed::test_suite = _createTestSuite(name, func);
+
+using namespace flawed;

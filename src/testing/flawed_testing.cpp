@@ -15,7 +15,7 @@ namespace flawed {
         _flawed_println(_add_color(test_name, _fl_blue) + _add_color(" succeeded", _fl_green));
     }
 
-    TestSuiteBase::TestSuiteBase(const std::string& name) {
+    TestSuite::TestSuite(const std::string& name) {
         if (name.length() == 0) {
             _flawed_println("Unspecified test name");
             die();
@@ -24,16 +24,16 @@ namespace flawed {
         this->name = name;
     }
 
-    std::string TestSuiteBase::getName() const {
+    std::string TestSuite::getName() const {
         return this->name;
     }
 
-    void TestSuiteBase::addTest(const std::string& name,
+    void TestSuite::addTest(const std::string& name,
                                 const std::function<void()>& func) {
         this->tests.push_back(std::make_pair(name, func));
     }
 
-    void TestSuiteBase::run() {
+    void TestSuite::run() {
 
         int num_failed = 0;
 
@@ -60,7 +60,9 @@ namespace flawed {
         }
 
         if (num_failed > 0) {
-            _flawed_println(_add_color(_to_string(num_failed) + " tests failed in test suite ", _fl_red)
+            _flawed_println(_add_color(_to_string(num_failed), _fl_red) + " out of "
+                            + _to_string(this->tests.size())
+                            + _add_color(" tests failed in test suite ", _fl_red)
                             + _add_color(this->getName(), _fl_blue));
         } else {
             _flawed_println(_add_color("All tests for ", _fl_green)
@@ -69,13 +71,28 @@ namespace flawed {
         }
     }
 
+    TestSuite* _innerTestSuiteBase;
+
+    void createTest(const std::string& name, const std::function<void()>& test) {
+        _innerTestSuiteBase->addTest(name, test);
+    }
+
+    TestSuite* _createTestSuite(const std::string& name, const std::function<void()>& testRegistrer) {
+        _innerTestSuiteBase = new TestSuite(name);
+
+        testRegistrer();
+
+        return _innerTestSuiteBase;
+    }
+
 };
 
 
+
 int main() {
-    fl_assert(flawed::fl_test_suite.get() != nullptr);
+    flawed::_flawed_println(" Running tests in " + flawed::_add_color(flawed::test_suite->getName(), flawed::_fl_blue));
 
-    flawed::_flawed_println(" Running tests in " + flawed::fl_test_suite->getName());
+    flawed::test_suite->run();
 
-    flawed::fl_test_suite->run();
+    delete flawed::test_suite;
 }

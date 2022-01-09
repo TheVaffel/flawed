@@ -28,9 +28,10 @@ namespace flawed {
             std::string location = _get_location_str(line_number, file_name);
 
             _flawed_assertion_error_println(
-                           " Difference exceeded tolerance in comparator for type " +
-                           _add_color(_getTypeName<T>(), _fl_blue) + " when comparing " +
-                           _add_color(sv0, _fl_red) + " and " + _add_color(sv1, _fl_green));
+                           " Difference between " + _add_color(_getTypeName<T>(), _fl_blue)
+                           + "s "
+                           + _add_color(sv0, _fl_red) + " and " + _add_color(sv1, _fl_green)
+                           + " exceeded tolerance");
             _flawed_println("At " + location);
 
             this->customPrintError(v0, v1, value, tolerance);
