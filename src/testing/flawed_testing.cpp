@@ -33,7 +33,7 @@ namespace flawed {
         this->tests.push_back(std::make_pair(name, func));
     }
 
-    void TestSuite::run() {
+    bool TestSuite::run() {
 
         int num_failed = 0;
 
@@ -45,7 +45,7 @@ namespace flawed {
 
             try {
                 this->tests[i].second();
-            } catch (const FlException& ex) {
+            } catch (const std::exception& ex) {
                 failed = true;
             }
 
@@ -60,8 +60,9 @@ namespace flawed {
         }
 
         if (num_failed > 0) {
-            _flawed_println(_add_color(_to_string(num_failed), _fl_red) + " out of "
-                            + _to_string(this->tests.size())
+            _flawed_println(_add_color(_to_string(num_failed)
+                                       + " out of "
+                                       + _to_string(this->tests.size()), _fl_red)
                             + _add_color(" tests failed in test suite ", _fl_red)
                             + _add_color(this->getName(), _fl_blue));
         } else {
@@ -69,6 +70,8 @@ namespace flawed {
                             + _add_color(this->getName(), _fl_blue)
                             + _add_color(" passed", _fl_green));
         }
+
+        return num_failed == 0;
     }
 
     TestSuite* _innerTestSuiteBase;
@@ -90,9 +93,15 @@ namespace flawed {
 
 
 int main() {
-    flawed::_flawed_println(" Running tests in " + flawed::_add_color(flawed::test_suite->getName(), flawed::_fl_blue));
+    flawed::_flawed_println("Running tests in " + flawed::_add_color(flawed::test_suite->getName(), flawed::_fl_blue));
 
-    flawed::test_suite->run();
+    bool all_succeeded = flawed::test_suite->run();
 
     delete flawed::test_suite;
+
+    if (all_succeeded) {
+        return 0;
+    } else {
+        return 1;
+    }
 }

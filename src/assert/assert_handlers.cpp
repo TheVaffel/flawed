@@ -6,7 +6,6 @@
 
 namespace flawed {
     void ThrowAssertionHandler::handleAssertionFailed() {
-        _flawed_println("Throwing on assertion failed");
         throw FlException("Assertion failed");
     }
 

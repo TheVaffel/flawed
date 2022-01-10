@@ -12,9 +12,12 @@ namespace flawed {
 
         TestSuite(const std::string& name);
 
-        void addTest(const std::string& name, const std::function<void()>& func);
         std::string getName() const;
-        void run();
+
+        void addTest(const std::string& name, const std::function<void()>& func);
+
+        // Returns whether all tests succeeded
+        bool run();
     };
 
 
