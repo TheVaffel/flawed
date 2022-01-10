@@ -15,6 +15,20 @@ namespace flawed {
         _flawed_println(_add_color(test_name, _fl_blue) + _add_color(" succeeded", _fl_green));
     }
 
+    static bool _run_test(const std::string& name, const std::function<void()>& func) {
+
+            bool succeeded = true;
+            _flawed_println("Running test " + _add_color(name, _fl_blue));
+
+            try {
+                func();
+            } catch (const std::exception& ex) {
+                succeeded = false;
+            }
+
+            return succeeded;
+    }
+
     TestSuite::TestSuite(const std::string& name) {
         if (name.length() == 0) {
             _flawed_println("Unspecified test name");
@@ -29,7 +43,7 @@ namespace flawed {
     }
 
     void TestSuite::addTest(const std::string& name,
-                                const std::function<void()>& func) {
+                            const std::function<void()>& func) {
         this->tests.push_back(std::make_pair(name, func));
     }
 
@@ -40,16 +54,9 @@ namespace flawed {
         set_assertion_handler(std::make_unique<ThrowAssertionHandler>());
 
         for (unsigned int i = 0; i < this->tests.size(); i++) {
-            bool failed = false;
-            _flawed_println("Running test " + _add_color(this->tests[i].first, _fl_blue));
+            bool succeeded = _run_test(this->tests[i].first, this->tests[i].second);
 
-            try {
-                this->tests[i].second();
-            } catch (const std::exception& ex) {
-                failed = true;
-            }
-
-            if (failed) {
+            if (!succeeded) {
                 num_failed++;
                 _print_test_failed(this->tests[i].first);
             } else {
@@ -88,12 +95,23 @@ namespace flawed {
         return _innerTestSuiteBase;
     }
 
+    static void _print_test_suite_header(const std::string& suite_name) {
+        std::string header_text = "Running tests in " + suite_name;
+        std::string colored_header_text = "Running tests in " + _add_color(suite_name, _fl_blue);
+
+            std::string line;
+        line.resize(header_text.length());
+        std::fill(line.begin(), line.end(), '=');
+
+        flawed::_flawed_println(line);
+        flawed::_flawed_println(colored_header_text);
+        flawed::_flawed_println(line);
+    }
 };
 
-
-
 int main() {
-    flawed::_flawed_println("Running tests in " + flawed::_add_color(flawed::test_suite->getName(), flawed::_fl_blue));
+
+    _print_test_suite_header(test_suite->getName());
 
     bool all_succeeded = flawed::test_suite->run();
 
