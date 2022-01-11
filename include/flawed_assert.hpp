@@ -14,33 +14,35 @@ namespace flawed {
  * -- Utility functions for assertion macros
  */
 
-    template <typename T>
-    static bool _eq(const T& v0, const T& v1) {
+    template <typename T, typename U>
+    requires std::equality_comparable_with<T, U>
+    bool _eq(const T& v0, const U& v1) {
         return v0 == v1;
     }
 
-    template <typename T>
-    static bool _neq(const T& v0, const T& v1) {
+    template <typename T, typename U>
+    requires std::equality_comparable_with<T, U>
+    bool _neq(const T& v0, const U& v1) {
         return v0 != v1;
     }
 
-    template <typename T>
-    static bool _lt(const T& v0, const T& v1) {
+    template <typename T, typename U>
+    bool _lt(const T& v0, const U& v1) {
         return v0 < v1;
     }
 
-    template <typename T>
-    static bool _gt(const T& v0, const T& v1) {
+    template <typename T, typename U>
+    bool _gt(const T& v0, const U& v1) {
         return v0 > v1;
     }
 
-    template <typename T>
-    static bool _le(const T& v0, const T& v1) {
+    template <typename T, typename U>
+    bool _le(const T& v0, const U& v1) {
         return v0 <= v1;
     }
 
-    template <typename T>
-    static bool _ge(const T& v0, const T& v1) {
+    template <typename T, typename U>
+    bool _ge(const T& v0, const U& v1) {
         return v0 >= v1;
     }
 };

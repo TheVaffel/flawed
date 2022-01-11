@@ -15,7 +15,9 @@ include_directories(${FLAWED_PATH}/include)
 
 function(flawed_add_test FILE_NAME)
 
-  string(REPLACE ".cpp" "" TEST_NAME ${FILE_NAME})
+  get_filename_component(STRIPPED_FILE_NAME ${FILE_NAME} NAME)
+
+  string(REPLACE ".cpp" "" TEST_NAME ${STRIPPED_FILE_NAME})
 
   add_executable(${TEST_NAME} ${FILE_NAME})
 

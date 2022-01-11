@@ -35,8 +35,8 @@ namespace flawed {
     void _fl_assert_print_location(int line_number, const std::string& file_name);
     void _fl_print_assertion_failed_op_header(const std::string& s0, const std::string& s1, const std::string& comp_error);
 
-    template<typename T>
-    static void _print_op_assertion_failed_message(const T& v0, const T& v1,
+    template<typename T, typename U>
+    static void _print_op_assertion_failed_message(const T& v0, const U& v1,
                                                    const std::string& s0, const std::string& s1,
                                                    const std::string& op_error,
                                                    int line_number,
@@ -49,9 +49,9 @@ namespace flawed {
             _print_op_right_side(v1);
     }
 
-    template<typename T>
+    template<typename T, typename U>
     void _fl_assert_op(bool b,
-                       const T& v0, const T& v1,
+                       const T& v0, const U& v1,
                        const std::string& sv0, const std::string& sv1,
                        const std::string& error,
                        int line_number,

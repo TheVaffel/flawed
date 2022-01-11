@@ -27,7 +27,7 @@ flawed_prefix = colored('[flawed] ', 'blue')
 if len(failed) == 0:
     success_txt = colored('All ' + str(len(files)) + ' test suites succeeded!', 'green')
     print(flawed_prefix + success_txt)
-    exit(1)
+    exit(0)
 else:
     su = 'file'
     if len(failed) != 1:
@@ -40,4 +40,4 @@ else:
         ff = colored('\t' + fail, 'blue')
         print(flawed_prefix + ff)
 
-    exit(0)
+    exit(1)
