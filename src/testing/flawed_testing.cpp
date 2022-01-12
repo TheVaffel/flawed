@@ -8,30 +8,30 @@ namespace flawed {
     static void die() { throw FlException("Died in testing"); }
 
     static void _print_test_failed(const std::string& test_name) {
-        _flawed_println(_add_color(test_name, _fl_blue) + _add_color(" failed", _fl_red));
+        std::cerr << _flawed_getln(_add_color(test_name, _fl_blue) + _add_color(" failed", _fl_red));
     }
 
     static void _print_test_succeeded(const std::string& test_name) {
-        _flawed_println(_add_color(test_name, _fl_blue) + _add_color(" succeeded", _fl_green));
+        std::cerr << _flawed_getln(_add_color(test_name, _fl_blue) + _add_color(" succeeded", _fl_green));
     }
 
     static bool _run_test(const std::string& name, const std::function<void()>& func) {
 
-            bool succeeded = true;
-            _flawed_println("Running test " + _add_color(name, _fl_blue));
+        bool succeeded = true;
+        std::cerr << _flawed_getln("Running test " + _add_color(name, _fl_blue));
 
-            try {
-                func();
-            } catch (const std::exception& ex) {
-                succeeded = false;
-            }
+        try {
+            func();
+        } catch (const std::exception& ex) {
+            succeeded = false;
+        }
 
-            return succeeded;
+        return succeeded;
     }
 
     TestSuite::TestSuite(const std::string& name) {
         if (name.length() == 0) {
-            _flawed_println("Unspecified test name");
+            std::cerr << _flawed_getln("Unspecified test name");
             die();
         }
 
@@ -51,7 +51,7 @@ namespace flawed {
 
         int num_failed = 0;
 
-        set_assertion_handler(std::make_unique<ThrowAssertionHandler>());
+        set_assertion_handler(std::make_unique<ThrowAssertionHandler>(true));
 
         for (unsigned int i = 0; i < this->tests.size(); i++) {
             bool succeeded = _run_test(this->tests[i].first, this->tests[i].second);
@@ -67,15 +67,15 @@ namespace flawed {
         }
 
         if (num_failed > 0) {
-            _flawed_println(_add_color(_to_string(num_failed)
-                                       + " out of "
-                                       + _to_string(this->tests.size()), _fl_red)
-                            + _add_color(" tests failed in test suite ", _fl_red)
-                            + _add_color(this->getName(), _fl_blue));
+            std::cerr << _flawed_getln(_add_color(_to_string(num_failed)
+                                                  + " out of "
+                                                  + _to_string(this->tests.size()), _fl_red)
+                                       + _add_color(" tests failed in test suite ", _fl_red)
+                                       + _add_color(this->getName(), _fl_blue));
         } else {
-            _flawed_println(_add_color("All tests for ", _fl_green)
-                            + _add_color(this->getName(), _fl_blue)
-                            + _add_color(" passed", _fl_green));
+            std::cerr << _flawed_getln(_add_color("All tests for ", _fl_green)
+                                       + _add_color(this->getName(), _fl_blue)
+                                       + _add_color(" passed", _fl_green));
         }
 
         return num_failed == 0;
@@ -99,13 +99,13 @@ namespace flawed {
         std::string header_text = "Running tests in " + suite_name;
         std::string colored_header_text = "Running tests in " + _add_color(suite_name, _fl_blue);
 
-            std::string line;
+        std::string line;
         line.resize(header_text.length());
         std::fill(line.begin(), line.end(), '=');
 
-        flawed::_flawed_println(line);
-        flawed::_flawed_println(colored_header_text);
-        flawed::_flawed_println(line);
+        std::string header = flawed::_flawed_getln(line) +
+            flawed::_flawed_getln(colored_header_text) +
+            flawed::_flawed_getln(line);
     }
 };
 

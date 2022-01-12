@@ -7,20 +7,20 @@
 #include <sstream>
 
 namespace flawed {
-    void _flawed_println(const std::string& message) {
-        std::cerr << flawed::_flawed_title
-                  << " "
-                  << message
-                  << std::endl;
+    std::string _flawed_getln(const std::string& message) {
+        return flawed::_flawed_title
+                  + " "
+                  + message
+                  + "\n";
     }
 
-    void _flawed_assertion_error_println(const std::string& message) {
-        std::cerr << flawed::_flawed_title
-                  << " "
-                  << flawed::_assertion_failed_string
-                  << " "
-                  << message
-                  << std::endl;
+    std::string _flawed_assertion_error_getln(const std::string& message) {
+        return flawed::_flawed_title
+            + " "
+            + flawed::_assertion_failed_string
+            + " "
+            + message
+            + "\n";
     }
 
     std::string _get_location_str(int line_number, const std::string& file_name) {

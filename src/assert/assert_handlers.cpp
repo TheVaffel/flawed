@@ -5,11 +5,21 @@
 #include "../utils/error.hpp"
 
 namespace flawed {
-    void ThrowAssertionHandler::handleAssertionFailed() {
+
+    ThrowAssertionHandler::ThrowAssertionHandler(bool silent) {
+        this->silent = silent;
+    }
+
+    void ThrowAssertionHandler::handleAssertionFailed(const std::string& message) {
+        if (!silent) {
+            std::cerr << message << std::endl;
+        }
         throw FlException("Assertion failed");
     }
 
-    void NoOpAssertionHandler::handleAssertionFailed() { }
+    void JustPrintAssertionHandler::handleAssertionFailed(const std::string& message) {
+        std::cerr << message << std::endl;
+    }
 
 
     /*
@@ -22,7 +32,7 @@ namespace flawed {
         _assertion_handler = std::move(assertion_handler);
     }
 
-    void _run_assertion_failed_handler() {
-        _assertion_handler->handleAssertionFailed();
+    void _run_assertion_failed_handler(const std::string& message) {
+        _assertion_handler->handleAssertionFailed(message);
     }
 };

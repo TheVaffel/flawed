@@ -7,7 +7,7 @@ namespace flawed {
     FlAssertionError::FlAssertionError(const std::string& str) : FlException(_assertion_failed_string + " " + str) { }
 
     void _report_internal_error(const std::string& str) {
-        _flawed_println(_add_color("Encountered internal error:", _fl_bg_red) +  " " + str);
+        std::cerr << _flawed_getln(_add_color("Encountered internal error:", _fl_bg_red) +  " " + str);
         throw std::logic_error(str);
     }
 };

@@ -27,10 +27,10 @@ namespace flawed {
     }
 
     template<typename T>
-    void _printComparatorError(const T& x, const T& y,
-                               const std::string& sx, const std::string& sy,
-                               int line_number, const std::string& file_name,
-                               float value, float tolerance) {
+    std::string _getComparatorError(const T& x, const T& y,
+                             const std::string& sx, const std::string& sy,
+                             int line_number, const std::string& file_name,
+                             float value, float tolerance) {
         std::string type_name = _getTypeName<T>();
         if (_comparatorMap.find(type_name) == _comparatorMap.end()) {
             _report_internal_error("Could not find comparator for type " +
@@ -40,7 +40,7 @@ namespace flawed {
 
         return std::static_pointer_cast<FlComparator<T>>(
             _comparatorMap[type_name]
-            )->printError(x, y, sx, sy, line_number, file_name, value, tolerance);
+            )->getError(x, y, sx, sy, line_number, file_name, value, tolerance);
     }
 
 

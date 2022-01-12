@@ -19,7 +19,7 @@ namespace some_namespace {
 
         double d0 = 0.5, d1 = 0.55;
 
-        flawed::set_assertion_handler(std::make_unique<flawed::NoOpAssertionHandler>());
+        flawed::set_assertion_handler(std::make_unique<flawed::JustPrintAssertionHandler>());
         flawed::registerComparator<int, CustomIntegralComparator>();
 
         fl_assert(true);

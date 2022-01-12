@@ -14,13 +14,13 @@ namespace flawed {
     public:
         FlNumericComparator() {}
 
-        virtual void customPrintError(const T& v0, const T& v1, float value, float tolerance) const override {
+        virtual std::string customGetError(const T& v0, const T& v1, float value, float tolerance) const override {
             std::ostringstream oss;
             oss << "Left side was " << _add_color(_to_string(v0), _fl_green)
                 << ", right side was " << _add_color(_to_string(v1), _fl_red)
                 << ", but max tolerance was " << _add_color(_to_string(tolerance), _fl_blue);
 
-            _flawed_println(oss.str());
+            return _flawed_getln(oss.str());
         }
 
         virtual float compare(const T& v0, const T& v1) override {

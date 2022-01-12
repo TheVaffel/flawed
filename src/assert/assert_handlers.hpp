@@ -9,18 +9,21 @@ namespace flawed {
      */
     class AssertionHandler {
     public:
-        virtual void handleAssertionFailed() = 0;
+        virtual void handleAssertionFailed(const std::string& message) = 0;
         virtual ~AssertionHandler() = default;
     };
 
     class ThrowAssertionHandler : public AssertionHandler {
+        bool silent;
     public:
-        virtual void handleAssertionFailed();
+        ThrowAssertionHandler(bool silent = false);
+
+        virtual void handleAssertionFailed(const std::string& message);
     };
 
-    class NoOpAssertionHandler : public AssertionHandler {
+    class JustPrintAssertionHandler : public AssertionHandler {
     public:
-        virtual void handleAssertionFailed();
+        virtual void handleAssertionFailed(const std::string& message);
     };
 
 
@@ -30,5 +33,5 @@ namespace flawed {
 
     void set_assertion_handler(std::unique_ptr<AssertionHandler>&& assertion_handler);
 
-    void _run_assertion_failed_handler();
+    void _run_assertion_failed_handler(const std::string& message);
 };
