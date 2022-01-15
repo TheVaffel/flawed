@@ -23,13 +23,25 @@ namespace flawed {
     }
 
     template<typename T>
+    requires _fl_stringable<T>
     static std::string _get_op_left_side(const T& v) {
         return _flawed_getln("\tLeft side: " + _add_color(_to_string(v), _fl_red));
     }
 
     template<typename T>
+    static std::string _get_op_left_side(const T& v) {
+        return "";
+    }
+
+    template<typename T>
+    requires _fl_stringable<T>
     static std::string _get_op_right_side(const T& v) {
         return _flawed_getln("\tRight side: " + _add_color(_to_string(v), _fl_green));
+    }
+
+    template<typename T>
+    static std::string _get_op_right_side(const T& v) {
+        return "";
     }
 
     std::string _fl_assert_get_location(int line_number, const std::string& file_name);
