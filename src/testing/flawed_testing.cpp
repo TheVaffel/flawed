@@ -24,6 +24,7 @@ namespace flawed {
             func();
         } catch (const std::exception& ex) {
             succeeded = false;
+            std::cerr << _flawed_getln(std::string("Got error: ") + ex.what());
         }
 
         return succeeded;

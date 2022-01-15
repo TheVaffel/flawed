@@ -13,8 +13,9 @@ namespace flawed {
     void ThrowAssertionHandler::handleAssertionFailed(const std::string& message) {
         if (!silent) {
             std::cerr << message << std::endl;
+            throw FlException(_flawed_getln("Assertion failed"));
         }
-        throw FlException("Assertion failed");
+        throw FlException(message);
     }
 
     void JustPrintAssertionHandler::handleAssertionFailed(const std::string& message) {
