@@ -25,6 +25,11 @@ namespace flawed {
 
     TestSuite* _createTestSuite(const std::string& name, const std::function<void()>& func);
     void createTest(const std::string& name, const std::function<void()>& test);
+
+    void beforeAll(const std::function<void()>& func);
+    void afterAll(const std::function<void()>& func);
+    void beforeEach(const std::function<void()>& func);
+    void afterEach(const std::function<void()>& func);
 };
 
 #define createTestSuite(name, func) TestSuite* flawed::test_suite = _createTestSuite(name, func);

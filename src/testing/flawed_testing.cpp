@@ -30,6 +30,14 @@ namespace flawed {
         return succeeded;
     }
 
+    /*
+     * Custom setup functions
+     */
+    static std::unique_ptr<std::function<void()>> onBeforeAll,
+        onAfterAll,
+        onBeforeEach,
+        onAfterEach;
+
     TestSuite::TestSuite(const std::string& name) {
         if (name.length() == 0) {
             std::cerr << _flawed_getln("Unspecified test name");
@@ -54,8 +62,20 @@ namespace flawed {
 
         set_assertion_handler(std::make_unique<ThrowAssertionHandler>(true));
 
+        if (onBeforeAll) {
+            (*onBeforeAll)();
+        }
+
         for (unsigned int i = 0; i < this->tests.size(); i++) {
+            if (onBeforeEach) {
+                (*onBeforeEach)();
+            }
+
             bool succeeded = _run_test(this->tests[i].first, this->tests[i].second);
+
+            if (onAfterEach) {
+                (*onAfterEach)();
+            }
 
             if (!succeeded) {
                 num_failed++;
@@ -65,6 +85,10 @@ namespace flawed {
             }
 
             std::cout << std::endl;
+        }
+
+        if (onAfterAll) {
+            (*onAfterAll)();
         }
 
         if (num_failed > 0) {
@@ -87,6 +111,23 @@ namespace flawed {
     void createTest(const std::string& name, const std::function<void()>& test) {
         _innerTestSuiteBase->addTest(name, test);
     }
+
+    void beforeAll(const std::function<void()>& func) {
+        onBeforeAll = std::make_unique<std::function<void()>>(func);
+    }
+
+    void beforeEach(const std::function<void()>& func) {
+        onBeforeEach = std::make_unique<std::function<void()>>(func);
+    }
+
+    void afterAll(const std::function<void()>& func) {
+        onAfterAll = std::make_unique<std::function<void()>>(func);
+    }
+
+    void afterEach(const std::function<void()>& func) {
+        onAfterEach = std::make_unique<std::function<void()>>(func);
+    }
+
 
     TestSuite* _createTestSuite(const std::string& name, const std::function<void()>& testRegistrer) {
         _innerTestSuiteBase = new TestSuite(name);
