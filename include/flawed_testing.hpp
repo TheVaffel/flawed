@@ -20,10 +20,7 @@ namespace flawed {
         bool run();
     };
 
-
-    extern TestSuite* test_suite;
-
-    TestSuite* _createTestSuite(const std::string& name, const std::function<void()>& func);
+    std::unique_ptr<TestSuite>&& createTestSuite(const std::string& name, const std::function<void()>& func);
     void createTest(const std::string& name, const std::function<void()>& test);
 
     void beforeAll(const std::function<void()>& func);
@@ -32,6 +29,9 @@ namespace flawed {
     void afterEach(const std::function<void()>& func);
 };
 
-#define createTestSuite(name, func) TestSuite* flawed::test_suite = _createTestSuite(name, func);
+
+extern std::unique_ptr<flawed::TestSuite> test_suite;
+
+#define defineTestSuite(name, func) std::unique_ptr<flawed::TestSuite> test_suite = createTestSuite(name, func);
 
 using namespace flawed;

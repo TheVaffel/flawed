@@ -106,7 +106,7 @@ namespace flawed {
         return num_failed == 0;
     }
 
-    TestSuite* _innerTestSuiteBase;
+    std::unique_ptr<TestSuite> _innerTestSuiteBase;
 
     void createTest(const std::string& name, const std::function<void()>& test) {
         _innerTestSuiteBase->addTest(name, test);
@@ -129,12 +129,12 @@ namespace flawed {
     }
 
 
-    TestSuite* _createTestSuite(const std::string& name, const std::function<void()>& testRegistrer) {
-        _innerTestSuiteBase = new TestSuite(name);
+    std::unique_ptr<TestSuite>&& createTestSuite(const std::string& name, const std::function<void()>& testRegistrer) {
+        _innerTestSuiteBase = std::make_unique<TestSuite>(name);
 
         testRegistrer();
 
-        return _innerTestSuiteBase;
+        return std::move(_innerTestSuiteBase);
     }
 
     static void _print_test_suite_header(const std::string& suite_name) {
@@ -155,9 +155,8 @@ int main() {
 
     _print_test_suite_header(test_suite->getName());
 
-    bool all_succeeded = flawed::test_suite->run();
+    bool all_succeeded = test_suite->run();
 
-    delete flawed::test_suite;
 
     if (all_succeeded) {
         return 0;

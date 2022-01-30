@@ -4,7 +4,7 @@
 #include <memory>
 #include <exception>
 
-createTestSuite("Custom Test", [] {
+std::unique_ptr<TestSuite> test_suite = createTestSuite("Custom Test", [] {
     createTest("Most basic test", [] {
             std::cout << "Hello hello" << std::endl;
 
