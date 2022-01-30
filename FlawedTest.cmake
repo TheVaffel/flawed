@@ -24,14 +24,16 @@ function(flawed_add_test FILE_NAME)
   target_link_libraries(${TEST_NAME} flawed_testing flawed)
 
   # Append test with prepended path
+  set(PREFIXED_TEST_NAME ${FLAWED_OUTPUT_PATH}/${TEST_NAME})
+
   set(_FLAWED_TEST_LIST ${_FLAWED_TEST_LIST} ${TEST_NAME} PARENT_SCOPE)
-  set(_FLAWED_PREFIXED_TEST_LIST ${_FLAWED_PREFIXED_TEST_LIST} ${FLAWED_OUTPUT_PATH}/${TEST_NAME} PARENT_SCOPE)
+  set(_FLAWED_PREFIXED_TEST_LIST ${_FLAWED_PREFIXED_TEST_LIST} ${PREFIXED_TEST_NAME} PARENT_SCOPE)
 
   set_target_properties(${TEST_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${FLAWED_OUTPUT_PATH})
   set_target_properties(${TEST_NAME} PROPERTIES EXCLUDE_FROM_ALL true)
 
-  get_target_property(OUTPUT_DIR ${TEST_NAME} RUNTIME_OUTPUT_DIRECTORY)
-
+  add_custom_target(flawed_run_${TEST_NAME} "python3" ${FLAWED_PATH}/flawed_run_tests.py ${PREFIXED_TEST_NAME})
+  add_dependencies(flawed_run_${TEST_NAME} ${TEST_NAME})
 endfunction()
 
 function(flawed_add_tests ...)

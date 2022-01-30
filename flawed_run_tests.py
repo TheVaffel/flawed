@@ -7,7 +7,7 @@ from termcolor import colored
 files = sys.argv[1:]
 
 if len(files) == 0:
-    print('Need to specify at least one test file to run')
+    print('[flawed_run_tests.py] Need to specify at least one test file to run')
     exit(-1);
 
 
