@@ -22,13 +22,14 @@ set(ASSERT_SOURCES
 
 set(STRING_SOURCES
   ${STRING_DIR}/colors.cpp
+  ${STRING_DIR}/data.cpp
   ${STRING_DIR}/abbrev.cpp)
 
 set(COMPARATORS_SOURCES
   ${COMPARATORS_DIR}/comparator_registry.cpp)
 
 
-add_library(${CMAKE_PROJECT_NAME}
+add_library(${CMAKE_PROJECT_NAME} STATIC
   ${UTIL_SOURCES}
   ${ASSERT_SOURCES}
   ${STRING_SOURCES}
@@ -39,5 +40,5 @@ set(TESTING_DIR ${SRC_DIR}/testing)
 set(TESTING_SOURCES
   ${TESTING_DIR}/flawed_testing.cpp)
 
-add_library(flawed_testing
+add_library(flawed_testing STATIC
   ${TESTING_SOURCES})

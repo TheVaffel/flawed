@@ -1,4 +1,5 @@
 #include "./error.hpp"
+#include "../strings/colors.hpp"
 
 namespace flawed {
 
